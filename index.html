@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Кратчайшее кольцо</title>
+    <title>The best choice</title>
     <link rel="stylesheet" href="static/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="static/css/bootstrap.min.css">
     <link rel="stylesheet" href="static/css/toastr.css">
@@ -22,6 +22,39 @@
             </div>
         </nav>
 
+         <div id="first" class="col-md-12">
+            <h1 class="page-header">1.Количество</h1>
+            <div class="form-horizontal col-md-8">
+                <div class="form-group">
+                    <label for="crits" class="col-sm-4 control-label">Количество критериев</label>
+                    <div class="col-sm-4">
+                      <input required
+                             type="number"
+                             class="form-control"
+                             id="crits"
+                             placeholder="Количество критериев">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="choices" class="col-sm-4 control-label">Количество вариантов</label>
+                    <div class="col-sm-4">
+                      <input required
+                             type="number"
+                             class="form-control"
+                             id="choices"
+                             placeholder="Количество вариантов">
+                    </div>
+                </div>
+
+                <button id="quantity_submit" type="button" class="btn btn-success pull-right">Дальше</button>
+            </div>
+        </div>
+
+        <div id="second" hidden class="col-md-12">
+            <h1 class="page-header">2. Заполнение матриц</h1>
+        </div>
+
     </div>
     <button onclick="getResultVariant()">lal</button>
 </body>
@@ -29,5 +62,6 @@
 <script src="static/js/libs/jquery-2.1.3.min.js"></script>
 <script src="static/js/libs/bootstrap.min.js"></script>
 <script src="static/js/libs/toastr.min.js"></script>
+<script src="static/js/main.js"></script>
 <script src="static/js/hierarchy.js"></script>
 </html>

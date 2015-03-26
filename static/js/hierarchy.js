@@ -55,6 +55,9 @@ function analyze(matrix){
 
 
 function getResultVariant(n, m, criteria_alpha, variant_alpha){
+	// criteria_alpha - массив альф критериев в порядке с К1 по Кn
+	// variant_alpha - массив из массивов альф вариантов, варианты с В1 по Вn внутри каждого массивчика
+	// n - количество критериев, m - количество вариантов
 	criteria_alpha = [0.097, 0.184, 0.184, 0.184, 0.35]
 	variant_alpha = [
 		[0.57, 0.285, 0.143],
