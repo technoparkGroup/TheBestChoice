@@ -42,11 +42,14 @@ $(document).ready(function() {
 
         } else {
             //конец матриц
-            $('#result').remove();
+            $('.result').remove();
             $nextMatrix.text("Обновить");
             var bestChoice = getResultVariant(criteriaNumber, choiceNumber, alphas);
-
-            $nextMatrix.before($('<h1/>', {'id': 'result', 'text': 'Лучший вариант: ' + bestChoice.best_variant}));
+            var $resultSums = $('<p/>', {'class': 'result'});
+            for(i = 0; i < bestChoice.sums; i++) {
+                $resultSums.append('Вариант ' + (i + 1) + '=' + bestChoice.sums[i] + '\n');
+            }
+            $nextMatrix.before($('<h1/>', {'class': 'result', 'text': 'Лучший вариант: ' + bestChoice.best_variant}));
         }
     }
 
