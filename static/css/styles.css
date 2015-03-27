@@ -1,0 +1,14 @@
+body {
+    padding-bottom: 20px;
+}
+
+.result {
+    width:  300px;
+    height: 300px;
+    border-radius: 10px;
+    border: solid thick #042662;
+}
+
+.inp {
+    min-width: 75px;
+}
