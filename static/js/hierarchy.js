@@ -53,8 +53,10 @@ function getResultVariant(n, m, alpha){
 	// variant_alpha - массив из массивов альф вариантов, варианты с В1 по Вn внутри каждого массивчика
 	// n - количество критериев, m - количество вариантов
 	criteria_alpha = alpha[0];
-	variant_alpha = alpha.splice(0, 1);
-	variant_alpha = alpha;
+	variant_alpha = [];
+	for (var i = 1; i < alpha.length; i++){
+		variant_alpha.push(alpha[i]);
+	}
 
 	var sums = [];
 	var max_sum = -Number.MAX_VALUE;
@@ -75,7 +77,7 @@ function getResultVariant(n, m, alpha){
 	}
 
 	console.log("Лучший вариант = " + max_variant);
-	
+
 	return {
 		"sums": sums,
 		"best_variant": max_variant + 1

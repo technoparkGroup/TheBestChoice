@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    alphas = [], //храним массивы для всех матриц
+    var alphas = [], //храним массивы для всех матриц
         cs = [],
         consistencyMarks = [];
 
@@ -189,6 +189,7 @@ $(document).ready(function() {
         $matrix.append([$table, $infoDiv]);
         $infoDiv.append([
             $('<p/>', {'class': 'col-md-5 consistency_mark',
+
                 'data-type': type,
                 'data-step': step}),
             $('<button/>', {'text': 'Проверить',
