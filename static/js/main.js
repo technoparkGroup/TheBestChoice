@@ -113,6 +113,7 @@ $(document).ready(function() {
                 if(i == j) {
                     $input = $('<input/>', {
                         'data-type': 'value',
+                        'data-step': step,
                         'data-row': i,
                         'data-column': j,
                         'class':"form-control",
@@ -124,6 +125,7 @@ $(document).ready(function() {
                         $input = $('<input/>', {
                             'data-type': 'value',
                             'data-row': i,
+                            'data-step': step,
                             'data-column': j,
                             'class':"form-control",
                             'readonly': 'readonly',
@@ -132,6 +134,7 @@ $(document).ready(function() {
                         $input = $('<input/>', {
                             'data-type': 'value',
                             'data-row': i,
+                            'data-step': step,
                             'data-column': j,
                             'class':"form-control",
                             'type':"number"});
@@ -140,9 +143,10 @@ $(document).ready(function() {
                         });
                         $input.bind('propertychange change click keyup input paste', function(event) {
                             var row = $(this).data('row'),
-                                column = $(this).data('column');
+                                column = $(this).data('column'),
+                                step = $(this).data('step');
 
-                            var $inverseInput = $('input[data-row=' + column +'][data-column=' + row +']');
+                            var $inverseInput = $('input[data-row=' + column +'][data-column=' + row +'][data-step=' + step +']');
                             var intValue = parseFloat($(this).val());
                             if(isNaN(intValue)) {
                                 $inverseInput.val("");
@@ -185,7 +189,6 @@ $(document).ready(function() {
         $matrix.append([$table, $infoDiv]);
         $infoDiv.append([
             $('<p/>', {'class': 'col-md-5 consistency_mark',
-                'text': 'статус',
                 'data-type': type,
                 'data-step': step}),
             $('<button/>', {'text': 'Проверить',
