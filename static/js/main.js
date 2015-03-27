@@ -44,6 +44,10 @@ $(document).ready(function() {
             //конец матриц
             $('.result').remove();
             $nextMatrix.text("Обновить");
+            if(alphas.length < 1) {
+                toastr.error('Проверьте все матрицы');
+                return;
+            }
             var bestChoice = getResultVariant(criteriaNumber, choiceNumber, alphas);
             var $resultSums = $('<p/>', {'class': 'result'});
             for(i = 0; i < bestChoice.sums; i++) {
