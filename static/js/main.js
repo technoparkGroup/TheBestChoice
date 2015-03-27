@@ -1,5 +1,9 @@
 $(document).ready(function() {
 
+    var alphas = [], //храним массивы для всех матриц
+        cs = [],
+        consistencyMarks = [];
+
     var step = 0;
 
     var $quantitySubmit = $('#quantity_submit'),
@@ -27,6 +31,12 @@ $(document).ready(function() {
     });
 
     function getNext() {
+        for(var i = 0; i < consistencyMarks.length; i++) {
+            if(consistencyMarks[i] > 0.1) {
+                toastr.error('Некоторые матрицы не согласованы');
+                return;
+            }
+        }
         if(step < criteriaNumber + 1) {
             $nextMatrix.before(getMatrix(choiceNumber, 'choice', 'Сравнение вариантов по критерию ' + step));
 
@@ -34,15 +44,48 @@ $(document).ready(function() {
             //конец матриц
             $('#result').remove();
             $nextMatrix.text("Обновить");
-            $nextMatrix.before($('<h1/>', {'id': 'result', 'text': 'THE END'}));
+            var bestChoice = getResultVariant(criteriaNumber, choiceNumber, alphas);
+
+            $nextMatrix.before($('<h1/>', {'id': 'result', 'text': 'Лучший вариант: ' + bestChoice.best_variant}));
         }
     }
 
+
+    function parseMatrix(tableElement) {
+        var $inputs = $(tableElement).find('input[data-type=value]');
+        var array = [];
+        var size = $(tableElement).data('size');
+        var correct = true;
+        $inputs.each(function () {
+            var inputValue = parseFloat($(this).val());
+            if(isNaN(inputValue)) {
+                correct = false;
+            } else {
+                array.push(inputValue);
+            }
+        });
+        if(!correct){
+            return null;
+        } else {
+            var matrix = [],
+                count = 0;
+            for (var i = 0; i < size; i++) {
+                var row = [];
+                for (var j = 0; j < size; j++) {
+                    row.push(array[count]);
+                    count++;
+                }
+                matrix.push(row);
+            }
+            return matrix;
+        }
+    }
 
     function getMatrix(size, type, caption) {
         var $table = $('<table/>', {
             'class': 'table table-hover table-bordered',
             'data-type': type,
+            'data-size': size,
             'data-step': step});
 
         $table.append($('<caption/>', {'text': caption}));
@@ -70,6 +113,7 @@ $(document).ready(function() {
                 if(i == j) {
                     $input = $('<input/>', {
                         'data-type': 'value',
+                        'data-step': step,
                         'data-row': i,
                         'data-column': j,
                         'class':"form-control",
@@ -81,6 +125,7 @@ $(document).ready(function() {
                         $input = $('<input/>', {
                             'data-type': 'value',
                             'data-row': i,
+                            'data-step': step,
                             'data-column': j,
                             'class':"form-control",
                             'readonly': 'readonly',
@@ -89,6 +134,7 @@ $(document).ready(function() {
                         $input = $('<input/>', {
                             'data-type': 'value',
                             'data-row': i,
+                            'data-step': step,
                             'data-column': j,
                             'class':"form-control",
                             'type':"number"});
@@ -97,14 +143,15 @@ $(document).ready(function() {
                         });
                         $input.bind('propertychange change click keyup input paste', function(event) {
                             var row = $(this).data('row'),
-                                column = $(this).data('column');
+                                column = $(this).data('column'),
+                                step = $(this).data('step');
 
-                            var $inverseInput = $('input[data-row=' + column +'][data-column=' + row +']');
-                            var intValue = parseInt($(this).val());
+                            var $inverseInput = $('input[data-row=' + column +'][data-column=' + row +'][data-step=' + step +']');
+                            var intValue = parseFloat($(this).val());
                             if(isNaN(intValue)) {
                                 $inverseInput.val("");
                             } else {
-                                $inverseInput.val(1 / intValue);
+                                $inverseInput.val((1 / intValue).toFixed(3));
                             }
                         });
                     }
@@ -141,14 +188,43 @@ $(document).ready(function() {
         var $infoDiv = $('<div/>', {'class': 'row'});
         $matrix.append([$table, $infoDiv]);
         $infoDiv.append([
-            $('<p/>', {'class': 'col-md-5',
-                'text': 'статус',
+            $('<p/>', {'class': 'col-md-5 consistency_mark',
                 'data-type': type,
                 'data-step': step}),
             $('<button/>', {'text': 'Проверить',
-                class: 'pull-right btn btn-success',
+                class: 'pull-right btn btn-success check_consistency',
                 'data-type': type,
-                'data-step': step})
+                'data-step': step}).on('click', function() {
+                var $table = $(this).parent().siblings(".table");
+                var step = $table.data('step');
+                var matrix = parseMatrix($table);
+                if(matrix === null) {
+                    toastr.error('Ошибка в матрице');
+                    return;
+                }
+                var analyzeInfo = analyze(matrix);
+                alphas[step] = analyzeInfo.alpha;
+                cs[step] = analyzeInfo.c_vector;
+                consistencyMarks[step] = analyzeInfo.OC;
+                var $consistencyMark = $(this).siblings('.consistency_mark');
+                $consistencyMark.text('Оценка согласованности: ' + analyzeInfo.OC);
+                if(analyzeInfo.OC > 0.1) {
+                    $consistencyMark.css({'color': 'red'});
+                } else {
+                    $consistencyMark.css({'color': 'green'});
+                }
+
+                var $alphas = $table.find('input[data-type=alpha]');
+                for(var i = 0; i < analyzeInfo.alpha.length; i++) {
+                    $alphas.filter('[data-row=' + i +']').val(analyzeInfo.alpha[i]);
+                }
+
+                var $vector = $table.find('input[data-type=c]');
+                for(i = 0; i < analyzeInfo.c_vector.length; i++) {
+                    $vector.filter('[data-row=' + i +']').val(analyzeInfo.c_vector[i]);
+                }
+
+                })
         ]);
         step += 1;
         return $matrix;
