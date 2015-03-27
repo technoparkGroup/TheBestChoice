@@ -1,4 +1,5 @@
 function analyze(matrix){
+
 	var n = matrix.length;
 
 	// Подсчет С = sqrtN(П Kj) 
@@ -47,20 +48,14 @@ function analyze(matrix){
 }
 
 
-function getResultVariant(n, m, criteria_alpha, variant_alpha){
+function getResultVariant(n, m, alpha){
 	// criteria_alpha - массив альф критериев в порядке с К1 по Кn
 	// variant_alpha - массив из массивов альф вариантов, варианты с В1 по Вn внутри каждого массивчика
 	// n - количество критериев, m - количество вариантов
-	criteria_alpha = [0.097, 0.184, 0.184, 0.184, 0.35];
-	variant_alpha = [
-		[0.57, 0.285, 0.143],
-		[0.143, 0.57, 0.285],
-		[0.107, 0.318, 0.575],
-		[0.25, 0.498, 0.25],
-		[0.57, 0.285, 0.143]
-	];
-	n = 5;
-	m = 3;
+	criteria_alpha = alpha[0];
+	variant_alpha = alpha.splice(0, 1);
+	variant_alpha = alpha;
+
 	var sums = [];
 	var max_sum = -Number.MAX_VALUE;
 	var max_variant = 0;
@@ -80,10 +75,10 @@ function getResultVariant(n, m, criteria_alpha, variant_alpha){
 	}
 
 	console.log("Лучший вариант = " + max_variant);
-
+	
 	return {
 		"sums": sums,
-		"best_variant": max_variant
+		"best_variant": max_variant + 1
 	}
 
 }

@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    var alphas = [], //храним массивы для всех матриц
+    alphas = [], //храним массивы для всех матриц
         cs = [],
         consistencyMarks = [];
 
