@@ -9,6 +9,6 @@ body {
     border: solid thick #042662;
 }
 
-.inp {
-    min-width: 75px;
+.btn {
+    margin-bottom: 20px;
 }
