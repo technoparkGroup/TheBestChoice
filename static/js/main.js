@@ -17,7 +17,8 @@ $(document).ready(function() {
     $quantitySubmit.on('click', function() {
         var choiceValue = parseInt($('#choices').val());
         var criteriaValue = parseInt($('#crits').val());
-        if(isNaN(choiceValue) || choiceValue < 1 || isNaN(criteriaValue) || criteriaValue < 1) {
+        if(isNaN(choiceValue) || choiceValue < 3 || isNaN(criteriaValue) 
+            || criteriaValue < 3 || criteriaValue > 10 || choiceValue > 10) {
             toastr.error("Ошибка в количестве");
             return;
         }
@@ -49,10 +50,13 @@ $(document).ready(function() {
                 return;
             }
             var bestChoice = getResultVariant(criteriaNumber, choiceNumber, alphas);
-            var $resultSums = $('<p/>', {'class': 'result'});
-            for(i = 0; i < bestChoice.sums; i++) {
-                $resultSums.append('Вариант ' + (i + 1) + '=' + bestChoice.sums[i] + '\n');
+            var $resultSums = $('<div/>', {'class': 'result'});
+            for(i = 0; i < bestChoice.sums.length; i++) {
+                $resultSums.append(
+                    '<div>Коэфициент варианта ' + (i + 1) + ' = ' + bestChoice.sums[i].toFixed(3) + '</div>'
+                );
             }
+            $nextMatrix.before($resultSums);
             $nextMatrix.before($('<h1/>', {'class': 'result', 'text': 'Лучший вариант: ' + bestChoice.best_variant}));
         }
     }

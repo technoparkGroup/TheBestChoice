@@ -37,7 +37,7 @@ function analyze(matrix){
 	}
 
 	var OC = (lamdba_max - n)/((n - 1)*R);
-	OC = Number(OC.toFixed(3));
+	OC = Math.abs(Number(OC.toFixed(3)));
 
 	return {
 		"OC": OC,
